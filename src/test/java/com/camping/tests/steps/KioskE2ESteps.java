@@ -6,6 +6,8 @@ import io.cucumber.java.en.When;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 
+import java.util.Map;
+
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -20,9 +22,11 @@ public class KioskE2ESteps {
 
     @Given("어드민 서비스로 로그인 API를 호출해 토큰을 발급 받아")
     public void 어드민_서비스로_로그인_API를_호출해_토큰을_발급_받아() {
+        Map<String, String> loginRequest = Map.of("username", "admin", "password", "admin123");
+
         Response response = given()
                 .contentType(ContentType.JSON)
-                .body("{\"username\":\"admin\",\"password\":\"admin123\"}")
+                .body(loginRequest)
         .when()
                 .post(ADMIN_BASE_URL + "/auth/login")
         .then()
