@@ -1,3 +1,8 @@
+x-database-environment: &database-environment
+  SPRING_DATASOURCE_URL: jdbc:mysql://atdd-db:3306/atdd
+  SPRING_DATASOURCE_USERNAME: root
+  SPRING_DATASOURCE_PASSWORD: secret
+
 networks:
   atdd-net:
     name: atdd-net
@@ -24,9 +29,7 @@ services:
     networks:
       - atdd-net
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://atdd-db:3306/atdd
-      - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=secret
+      <<: *database-environment
 
   reservation:
     build:
@@ -37,6 +40,4 @@ services:
     networks:
       - atdd-net
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://atdd-db:3306/atdd
-      - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=secret
+      <<: *database-environment
