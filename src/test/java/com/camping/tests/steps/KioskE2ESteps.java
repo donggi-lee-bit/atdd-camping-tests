@@ -8,6 +8,8 @@ import io.restassured.response.Response;
 
 import java.util.Map;
 
+import static com.camping.tests.context.TestContext.ADMIN_BASE_URL;
+import static com.camping.tests.context.TestContext.KIOSK_BASE_URL;
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -16,9 +18,6 @@ public class KioskE2ESteps {
 
     private String authToken;
     private Response lastResponse;
-
-    private static final String ADMIN_BASE_URL = "http://localhost:18082";
-    private static final String KIOSK_BASE_URL = "http://localhost:18081";
 
     @Given("어드민 서비스로 로그인 API를 호출해 토큰을 발급 받아")
     public void 어드민_서비스로_로그인_API를_호출해_토큰을_발급_받아() {
