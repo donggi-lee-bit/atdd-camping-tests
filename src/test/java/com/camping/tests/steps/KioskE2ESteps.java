@@ -19,28 +19,9 @@ public class KioskE2ESteps {
     private String authToken;
     private Response lastResponse;
 
-    @Given("어드민 서비스로 로그인 API를 호출해 토큰을 발급 받아")
-    public void 어드민_서비스로_로그인_API를_호출해_토큰을_발급_받아() {
-        Map<String, String> loginRequest = Map.of("username", "admin", "password", "admin123");
 
-        Response response = given()
-                .contentType(ContentType.JSON)
-                .body(loginRequest)
-        .when()
-                .post(ADMIN_BASE_URL + "/auth/login")
-        .then()
-                .statusCode(200)
-                .extract().response();
-
-        String cookieToken = response.getCookie("AUTH_TOKEN");
-        String jsonToken = response.jsonPath().getString("accessToken");
-        this.authToken = cookieToken != null ? cookieToken : jsonToken;
-
-        assertThat(cookieToken).isNotNull();
-    }
-
-    @When("키오스크 서비스의 상품 목록 조회를 호출하면")
-    public void 키오스크_서비스의_상품_목록_조회를_호출하면() {
+    @When("키오스크 서비스에서 상품 목록 조회를 호출하면")
+    public void 키오스크_서비스에서_상품_목록_조회를_호출하면() {
         this.lastResponse = given()
                 .cookie("AUTH_TOKEN", this.authToken)
         .when()
@@ -51,7 +32,7 @@ public class KioskE2ESteps {
                 .extract().response();
     }
 
-    @Then("상품이 {int}개 이상 조회된다")
+    @Then("상품이 조회된다")
     public void 상품이_조회된다(int expectedMinCount) {
         int actualCount = this.lastResponse.jsonPath().getList("$").size();
 
