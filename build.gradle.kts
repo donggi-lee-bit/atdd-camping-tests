@@ -38,24 +38,50 @@ tasks.test {
     useJUnitPlatform()
 }
 
+tasks.register<Exec>("infraUp") {
+    group = "infra"
+    description = "Run infrastructure (db) and wait for it to be healthy"
+    commandLine(
+        "docker", "compose",
+        "-f", "infra/docker-compose-infra.yml",
+        "up", "-d", "--wait"
+    )
+}
+
 tasks.register<Exec>("servicesUp") {
     group = "infra"
     description = "Run all services (admin, reservation, kiosk) via docker compose (build + up)"
+    dependsOn("infraUp")
     commandLine(
-        "/opt/homebrew/bin/docker", "compose",
+        "docker", "compose",
         "-f", "infra/docker-compose.yml",
         "up", "-d", "--build"
     )
 }
 
+tasks.register<Exec>("infraDown") {
+    group = "infra"
+    description = "Stop infrastructure (db) and remove volumes"
+    commandLine(
+        "docker", "compose",
+        "-f", "infra/docker-compose-infra.yml",
+        "down", "-v"
+    )
+    isIgnoreExitValue = true
+}
+
 tasks.register<Exec>("servicesDown") {
     group = "infra"
-    description = "Stop all services compose and remove volumes"
+    description = "Stop all services and infra, and remove volumes"
+    finalizedBy("infraDown")
     commandLine(
-        "/opt/homebrew/bin/docker", "compose",
+        "docker", "compose",
         "-f", "infra/docker-compose.yml",
         "down", "-v"
     )
+    // 컨테이너가 없어도 실패하지 않아 멱등성 보장 (여러 번 실행에도 안전)
+    // CI/CD에서 정리 단계 실패로 인한 불필요한 빌드 중단 방지
+    isIgnoreExitValue = true
 }
 
 tasks.register("syncRepos") {

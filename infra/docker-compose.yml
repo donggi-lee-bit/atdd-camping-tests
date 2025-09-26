@@ -41,3 +41,14 @@ services:
       - atdd-net
     environment:
       <<: *database-environment
+
+  payments:
+    build:
+      context: ..
+      dockerfile: infra/dockerfiles/Dockerfile-payments
+    ports:
+      - "18084:8080"
+    networks:
+      - atdd-net
+    environment:
+      <<: *database-environment
