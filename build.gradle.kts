@@ -68,7 +68,8 @@ tasks.register("syncRepos") {
         val repositories = mapOf(
             "atdd-camping-admin" to "https://github.com/donggi-lee-bit/atdd-camping-admin.git",
             "atdd-camping-reservation" to "https://github.com/donggi-lee-bit/atdd-camping-reservation.git",
-            "atdd-camping-kiosk" to "https://github.com/donggi-lee-bit/atdd-camping-kiosk.git"
+            "atdd-camping-kiosk" to "https://github.com/donggi-lee-bit/atdd-camping-kiosk.git",
+            "atdd-camping-payments" to "https://github.com/donggi-lee-bit/atdd-camping-payments.git"
         )
 
         repositories.forEach { (repoName, repoUrl) ->
